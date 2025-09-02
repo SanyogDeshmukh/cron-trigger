@@ -21,18 +21,19 @@
   
      stages {
         stage('Guard') {
-            steps {
-                script {
-                    // Allow s390x builds only when triggered by the Sunday cron
-                    if (params.nodeLabel == 's390x' &&
-                        currentBuild.rawBuild.getCause(hudson.triggers.TimerTrigger.TimerTriggerCause) == null) {
-                        echo "Skipping s390x build (not Sunday cron trigger)"
-                        currentBuild.result = 'NOT_BUILT'
-                        error("Aborting pipeline for non-scheduled s390x run")
-                    }
-                }
+    steps {
+        script {
+            def causes = currentBuild.getBuildCauses()
+            def triggeredByCron = causes.any { it._class == 'hudson.triggers.TimerTrigger$TimerTriggerCause' }
+
+            if (params.nodeLabel == 's390x' && !triggeredByCron) {
+                echo "Skipping s390x build (not Sunday cron trigger)"
+                currentBuild.result = 'NOT_BUILT'
+                error("Aborting pipeline for non-scheduled s390x run")
             }
         }
+    }
+}
 
          stage('Initialization') {
              steps {
