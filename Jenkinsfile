@@ -10,7 +10,15 @@
         // Run s390x builds every Sunday at midnight
         cron('H 0 * * 0')
     }
- 
+
+    parameters {
+        choice(
+            name: 'nodeLabel',
+            choices: ['amd64', 's390x'],
+            description: 'Choose target architecture'
+        )
+    }
+  
      stages {
         stage('Guard') {
             steps {
