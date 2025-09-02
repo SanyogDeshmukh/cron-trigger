@@ -37,7 +37,7 @@
          stage('Initialization') {
              steps {
                  echo "running on ${env.NODE_NAME}"
-                 sh './script.sh'
+                 sudo sh './script.sh'
              }
          }
      }
