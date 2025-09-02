@@ -9,7 +9,7 @@
     triggers {
         // Run s390x builds every Sunday at midnight
         //cron('H 0 * * 0')
-        cron('H+10 * * * *')
+        cron('H/5 * * * *')
     }
 
     parameters {
