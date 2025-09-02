@@ -11,11 +11,6 @@
         cron('H 0 * * 0')
     }
  
-     tools {
-         // ... tell Jenkins what java version, maven version or other tools are required ...
-@@
-     }
- 
      stages {
         stage('Guard') {
             steps {
