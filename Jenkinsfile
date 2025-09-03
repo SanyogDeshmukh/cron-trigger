@@ -21,14 +21,14 @@
                     // Detect if triggered by cron
                     def causes = currentBuild.getBuildCauses()
                     def triggeredByCron = causes.any { it._class == 'hudson.triggers.TimerTrigger$TimerTriggerCause' }
-
+                    
                     if (triggeredByCron) {
                         // Cron → force s390x
-                        targetNode = 's390x'
+                        env.TARGET_NODE = 's390x'
                         echo "Triggered by CRON → running s390x"
                     } else {
                         // Manual or other triggers → use parameter (amd64 preferred)
-                        targetNode = params.nodeLabel
+                        env.TARGET_NODE = params.nodeLabel
                         echo "Manual/Other trigger → running ${targetNode}"
                     }
                 }
@@ -36,7 +36,7 @@
         }
 
         stage('Initialization') {
-            agent { node { label targetNode } }
+            agent { node env.TARGET_NODE }
             steps {
                 echo "running on ${env.NODE_NAME}"
                 echo "requested label: ${params.nodeLabel}"
