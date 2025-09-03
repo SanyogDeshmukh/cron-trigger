@@ -41,6 +41,8 @@
                     node(env.TARGET_NODE) {
                         stage('Initialization') {
                             echo "running on ${env.NODE_NAME}"
+                            echo "Requested label: ${params.nodeLabel}"
+                            echo "Effective target node: ${env.TARGET_NODE}"
                             sh 'chmod +x script.sh'
                             sh './script.sh'
                         }
