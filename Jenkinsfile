@@ -28,7 +28,7 @@
                         echo "Triggered by CRON → running s390x"
                     } else {
                         // Manual or other triggers → use parameter (amd64 preferred)
-                        targetNode = params.nodeLabel == 's390x' ? 'amd64' : params.nodeLabel
+                        targetNode = params.nodeLabel
                         echo "Manual/Other trigger → running ${targetNode}"
                     }
                 }
