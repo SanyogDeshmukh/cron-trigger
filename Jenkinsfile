@@ -36,7 +36,7 @@
         }
 
         stage('Initialization') {
-            agent { label "${targetNode}" }
+            agent { node { label targetNode } }
             steps {
                 echo "running on ${env.NODE_NAME}"
                 echo "requested label: ${params.nodeLabel}"
