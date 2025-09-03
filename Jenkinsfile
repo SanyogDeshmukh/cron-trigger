@@ -43,6 +43,7 @@
                             echo "running on ${env.NODE_NAME}"
                             echo "Requested label: ${params.nodeLabel}"
                             echo "Effective target node: ${env.TARGET_NODE}"
+                            checkout scm
                             sh 'chmod +x script.sh'
                             sh './script.sh'
                         }
