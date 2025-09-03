@@ -39,6 +39,7 @@
             agent { label "${targetNode}" }
             steps {
                 echo "running on ${env.NODE_NAME}"
+                echo "requested label: ${params.nodeLabel}"
                 sh 'chmod +x script.sh'
                 sh './script.sh'
             }
