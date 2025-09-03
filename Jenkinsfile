@@ -29,7 +29,7 @@
                     } else {
                         // Manual or other triggers → use parameter (amd64 preferred)
                         env.TARGET_NODE = params.nodeLabel
-                        echo "Manual/Other trigger → running ${targetNode}"
+                        echo "Manual/Other trigger → running ${params.nodeLabel}"
                     }
                 }
             }
