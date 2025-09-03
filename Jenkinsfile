@@ -1,16 +1,5 @@
  pipeline {
- 
-     agent {
-         label {
-             label params.nodeLabel
-         }
-     }
-
-    triggers {
-        // Run s390x builds every Sunday at midnight
-        //cron('H 0 * * 0')
-        cron('H/5 * * * *')
-    }
+    agent none
 
     parameters {
         choice(
@@ -19,30 +8,41 @@
             description: 'Choose target architecture'
         )
     }
-  
-     stages {
-        stage('Guard') {
-    steps {
-        script {
-            def causes = currentBuild.getBuildCauses()
-            def triggeredByCron = causes.any { it._class == 'hudson.triggers.TimerTrigger$TimerTriggerCause' }
 
-            if (params.nodeLabel == 's390x' && !triggeredByCron) {
-                echo "Skipping s390x build (not Sunday cron trigger)"
-                currentBuild.result = 'NOT_BUILT'
-                error("Aborting pipeline for non-scheduled s390x run")
+    triggers {
+        // Run s390x builds every Sunday at midnight (for testing: every 5 min)
+        cron('H/5 * * * *')
+    }
+
+    stages {
+        stage('Decide Node') {
+            steps {
+                script {
+                    // Detect if triggered by cron
+                    def causes = currentBuild.getBuildCauses()
+                    def triggeredByCron = causes.any { it._class == 'hudson.triggers.TimerTrigger$TimerTriggerCause' }
+
+                    if (triggeredByCron) {
+                        // Cron → force s390x
+                        targetNode = 's390x'
+                        echo "Triggered by CRON → running s390x"
+                    } else {
+                        // Manual or other triggers → use parameter (amd64 preferred)
+                        targetNode = params.nodeLabel == 's390x' ? 'amd64' : params.nodeLabel
+                        echo "Manual/Other trigger → running ${targetNode}"
+                    }
+                }
+            }
+        }
+
+        stage('Initialization') {
+            agent { label "${targetNode}" }
+            steps {
+                echo "running on ${env.NODE_NAME}"
+                sh 'chmod +x script.sh'
+                sh './script.sh'
             }
         }
     }
 }
 
-         stage('Initialization') {
-             steps {
-                 echo "running on ${env.NODE_NAME}"
-                 echo "requested label: ${params.nodeLabel}"
-                 sh 'chmod +x script.sh'
-                 sh './script.sh'
-             }
-         }
-     }
- }
