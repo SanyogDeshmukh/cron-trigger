@@ -35,13 +35,29 @@
             }
         }
 
-        stage('Initialization') {
-            agent { node env.TARGET_NODE }
+        stage('All Steps on Selected Node') {
             steps {
-                echo "running on ${env.NODE_NAME}"
-                echo "requested label: ${params.nodeLabel}"
-                sh 'chmod +x script.sh'
-                sh './script.sh'
+                script {
+                    node(env.TARGET_NODE) {
+                        stage('Initialization') {
+                            echo "running on ${env.NODE_NAME}"
+                            sh 'chmod +x script.sh'
+                            sh './script.sh'
+                        }
+
+                        stage('Build') {
+                            echo "Building on ${env.NODE_NAME}"
+                        }
+
+                        stage('Test') {
+                            echo "Testing on ${env.NODE_NAME}"
+                        }
+
+                        stage('Deploy') {
+                            echo "Deploying on ${env.NODE_NAME}"
+                        }
+                    }
+                }
             }
         }
     }
