@@ -16,7 +16,7 @@
     }
 
     stages {
-        stage('Decide Node') {
+        stage('Node Selection') {
             steps {
                 script {
                     // Detect if triggered by cron
@@ -35,7 +35,7 @@
                 }
             }
         }
-    stage('All Steps on Selected Node') {
+    stage('Main Workflow') {
         agent { label "${targetNode}" }
         stages {
         stage('Initialization') {
