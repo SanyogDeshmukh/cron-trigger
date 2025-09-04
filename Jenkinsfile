@@ -37,6 +37,7 @@
         }
     stage('All Steps on Selected Node') {
         agent { label "${targetNode}" }
+        stages {
         stage('Initialization') {
             steps {
                 echo "running on ${env.NODE_NAME}"
@@ -63,6 +64,7 @@
                 echo "Deploying on ${env.NODE_NAME}"
            }
        }
+     }
     }
   }
 }
