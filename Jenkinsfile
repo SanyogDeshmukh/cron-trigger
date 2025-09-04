@@ -47,15 +47,21 @@
         }
 
         stage('Build') {
+           steps {
                 echo "Building on ${env.NODE_NAME}"
+           }
         }
 
         stage('Test') {
+           steps {
                 echo "Testing on ${env.NODE_NAME}"
+           }
         }
 
         stage('Deploy') {
+           steps {
                 echo "Deploying on ${env.NODE_NAME}"
+           }
        }
     }
 }
