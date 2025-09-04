@@ -45,5 +45,17 @@
                 sh './script.sh'
             }
         }
+
+        stage('Build') {
+                echo "Building on ${env.NODE_NAME}"
+        }
+
+        stage('Test') {
+                echo "Testing on ${env.NODE_NAME}"
+        }
+
+        stage('Deploy') {
+                echo "Deploying on ${env.NODE_NAME}"
+       }
     }
 }
